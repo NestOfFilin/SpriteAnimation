@@ -13,7 +13,7 @@ public:
             0L,
             L"SpriteAnimation",
             L"SpriteAnimation",
-            WS_SYSMENU | WS_VISIBLE,
+            WS_OVERLAPPEDWINDOW | WS_VISIBLE,
             200,
             200,
             407,
@@ -58,7 +58,7 @@ private:
     {
         s_WindowPointers.insert(this);
 
-        m_Win32WindowStructClass.style = 0;
+        m_Win32WindowStructClass.style = CS_HREDRAW | CS_VREDRAW;
         m_Win32WindowStructClass.lpfnWndProc = &CWin32SFMLWindow::StaticOnEvent;
         m_Win32WindowStructClass.cbClsExtra = 0;
         m_Win32WindowStructClass.cbWndExtra = 0;
