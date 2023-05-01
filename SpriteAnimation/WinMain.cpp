@@ -36,7 +36,7 @@ public:
 		DestroyWindow(m_Win32Window);
 
 		// Don't forget to unregister the window class
-		UnregisterClassW(L"SFML App", m_hInstance);
+		UnregisterClassW(L"SpriteAnimation", m_hInstance);
 
 		s_WindowPointers.erase(this);
 	}
