@@ -120,7 +120,7 @@ private:
 		{
 			if (m_SfmlWin.isOpen())
 			{
-				m_SfmlWin.clear(sf::Color(0, 0, 0, 0));
+				m_SfmlWin.clear(sf::Color(123, 191, 96, 255));
 				m_SfmlWin.draw(m_Sprite1);
 				m_SfmlWin.display();
 			}
