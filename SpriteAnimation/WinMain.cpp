@@ -89,7 +89,12 @@ private:
 			const unsigned sy = HIWORD(lParam);
 			if (m_SfmlWin.isOpen())
 			{
-				m_SfmlWin.setView(sf::View(sf::FloatRect(0.F, 0.F, sx, sy)));
+				m_SfmlWin.setView(sf::View(sf::FloatRect(
+					0.F,
+					0.F,
+					static_cast<float>(sx),
+					static_cast<float>(sy)
+				)));
 				m_SfmlWin.setSize({ sx, sy });
 
 				const auto scale = m_Sprite1.getScale();
@@ -163,7 +168,12 @@ private:
 					throw EXIT_FAILURE;
 				}
 
-				std::string strFileName(wstrFileName.begin(), wstrFileName.end());
+				std::string strFileName(wstrFileName.length(), 0);
+				std::transform(wstrFileName.begin(), wstrFileName.end(), strFileName.begin(),
+					[](wchar_t c)
+				{
+					return static_cast<char>(c);
+				});
 				if (!m_Texture1.loadFromFile(strFileName))
 				{
 					throw EXIT_FAILURE;
