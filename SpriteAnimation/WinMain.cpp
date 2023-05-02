@@ -1,4 +1,5 @@
-#include <SFML/Graphics.hpp>
+#include "SpriteAnimation/SpriteAnimation.h"
+
 #include <windows.h>
 #include <cmath>
 #include <set>
@@ -97,36 +98,34 @@ private:
 				)));
 				m_SfmlWin.setSize({ sx, sy });
 
-				const auto scale = m_Sprite1.getScale();
-				m_Sprite1.setPosition(
-					static_cast<float>(sx) / 2.F,
-					static_cast<float>(sy) / 2.F
-				);
+				if (m_pSpriteAnimation)
+				{
+					auto& sprite = m_pSpriteAnimation->GetSprite();
+					const auto scale = sprite.getScale();
+					sprite.setPosition(
+						static_cast<float>(sx) / 2.F,
+						static_cast<float>(sy) / 2.F
+					);
+				}
 			}
+			break;
 		}
 		case WM_TIMER:
 		{
-			m_CurSpriteNum++;
-			if (m_CurSpriteNum == m_SpritesCount)
+			if (m_pSpriteAnimation)
 			{
-				m_CurSpriteNum = 0;
+				m_pSpriteAnimation->PutNextSprite();
 			}
-
-			const auto& textureRect = m_Sprite1.getTextureRect();
-			m_Sprite1.setTextureRect(
-				sf::IntRect(
-					textureRect.width * m_CurSpriteNum,
-					textureRect.top,
-					textureRect.width,
-					textureRect.height)
-			);
 		}
 		case WM_PAINT:
 		{
 			if (m_SfmlWin.isOpen())
 			{
 				m_SfmlWin.clear(sf::Color(123, 191, 96, 255));
-				m_SfmlWin.draw(m_Sprite1);
+				if (m_pSpriteAnimation)
+				{
+					m_SfmlWin.draw(m_pSpriteAnimation->GetSprite());
+				}
 				m_SfmlWin.display();
 			}
 			break;
@@ -174,29 +173,29 @@ private:
 				{
 					return static_cast<char>(c);
 				});
-				if (!m_Texture1.loadFromFile(strFileName))
+
+				sf::Image image;
+				if (!image.loadFromFile(strFileName))
 				{
 					throw EXIT_FAILURE;
 				}
+
+				m_pSpriteAnimation = std::make_unique<CSpriteAnimation>(
+					image,
+					ESCGerenatorType::ColorColumn
+				);
 			}
 
 			// Free up memory.
 			DragFinish(hdrop);
 
-			m_Sprite1.setTexture(m_Texture1, true);
-			const auto& textureRect = m_Sprite1.getTextureRect();
-			m_Sprite1.setTextureRect(sf::IntRect(
-				textureRect.left,
-				textureRect.top,
-				textureRect.width / 4,
-				textureRect.height
-			));
+			auto& sprite = m_pSpriteAnimation->GetSprite();
 
-			m_Sprite1.setScale(m_Sprite1.getScale() * 4.F);
-			const auto spriteRect = m_Sprite1.getLocalBounds();
-			m_Sprite1.setOrigin(spriteRect.width / 2.F, spriteRect.height / 2.F);
+			sprite.setScale(sprite.getScale() * 4.F);
+			const auto spriteRect = sprite.getLocalBounds();
+			sprite.setOrigin(spriteRect.width / 2.F, spriteRect.height / 2.F);
 			const auto wndSize = m_SfmlWin.getSize();
-			m_Sprite1.setPosition(
+			sprite.setPosition(
 				static_cast<float>(wndSize.x) / 2.F,
 				static_cast<float>(wndSize.y) / 2.F
 			);
@@ -219,14 +218,7 @@ private:
 
 	sf::RenderWindow m_SfmlWin;
 
-	sf::Texture m_Texture1;
-
-	sf::Sprite m_Sprite1;
-
-	sf::Clock m_Clock;
-
-	unsigned m_CurSpriteNum{ 0 };
-	unsigned m_SpritesCount{ 4 };
+	std::unique_ptr<CSpriteAnimation> m_pSpriteAnimation;
 
 private:
 	static std::set<CWin32SFMLWindow*> s_WindowPointers;
