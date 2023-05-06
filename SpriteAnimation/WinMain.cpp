@@ -3,6 +3,8 @@
 #include <windows.h>
 #include <set>
 
+constexpr wchar_t s_Title[16] = L"SpriteAnimation";
+
 
 class CWin32SFMLWindow
 {
@@ -11,8 +13,8 @@ public:
 		: m_hInstance(InitWin32WindowStruct(hInstance))
 		, m_Win32Window(CreateWindowExW(
 			0L,
-			L"SpriteAnimation",
-			L"SpriteAnimation",
+			s_Title,
+			s_Title,
 			WS_OVERLAPPEDWINDOW | WS_VISIBLE,
 			200,
 			200,
@@ -36,7 +38,7 @@ public:
 		DestroyWindow(m_Win32Window);
 
 		// Don't forget to unregister the window class
-		UnregisterClassW(L"SpriteAnimation", m_hInstance);
+		UnregisterClassW(s_Title, m_hInstance);
 
 		s_WindowPointers.erase(this);
 	}
@@ -55,7 +57,7 @@ private:
 		m_Win32WindowStructClass.hCursor = 0;
 		m_Win32WindowStructClass.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_BACKGROUND);
 		m_Win32WindowStructClass.lpszMenuName = nullptr;
-		m_Win32WindowStructClass.lpszClassName = L"SpriteAnimation";
+		m_Win32WindowStructClass.lpszClassName = s_Title;
 		RegisterClassW(&m_Win32WindowStructClass);
 
 		return hInstance;
