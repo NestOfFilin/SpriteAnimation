@@ -121,7 +121,7 @@ private:
 		{
 			if (m_SfmlWin.isOpen())
 			{
-				m_SfmlWin.clear(sf::Color(123, 191, 96, 255));
+				m_SfmlWin.clear(sf::Color(123U, 191U, 96U, 255U));
 				if (m_pSpriteAnimation)
 				{
 					m_SfmlWin.draw(m_pSpriteAnimation->GetSprite());
@@ -143,36 +143,40 @@ private:
 			UINT  uCountFiles;
 
 			// Get the # of files being dropped.
-			uCountFiles = DragQueryFileW(hdrop, -1, nullptr, 0);
+			uCountFiles = DragQueryFileW(hdrop, 0xFFFFFFFF, nullptr, 0Ui32);
 
-			for (UINT uFile = 0; uFile < uCountFiles; uFile++)
+			for (UINT uFile = 0Ui32; uFile < uCountFiles; uFile++)
 			{
-				UINT uBufferSize = DragQueryFileW(hdrop, uFile, nullptr, 0);
-				if (uBufferSize == 0)
+				UINT uBufferSize = DragQueryFileW(hdrop, uFile, nullptr, 0Ui32);
+				if (uBufferSize == 0Ui32)
 				{
 					throw EXIT_FAILURE;
 				}
 				std::wstring wstrFileName;
-				wstrFileName.resize(uBufferSize + 1);
+				wstrFileName.resize(static_cast<size_t>(uBufferSize) + 1Ui64);
 
 				UINT uReadedChars = DragQueryFileW(
 					hdrop,
 					uFile,
 					(TCHAR*)wstrFileName.data(),
-					uBufferSize + 1
+					uBufferSize + 1Ui32
 				);
 
-				if (uReadedChars == 0)
+				if (uReadedChars == 0Ui32)
 				{
 					throw EXIT_FAILURE;
 				}
 
-				std::string strFileName(wstrFileName.length(), 0);
-				std::transform(wstrFileName.begin(), wstrFileName.end(), strFileName.begin(),
+				std::string strFileName(wstrFileName.length(), 0Ui64);
+				std::transform(
+					wstrFileName.begin(),
+					wstrFileName.end(),
+					strFileName.begin(),
 					[](wchar_t c)
-				{
-					return static_cast<char>(c);
-				});
+					{
+						return static_cast<char>(c);
+					}
+				);
 
 				sf::Image image;
 				if (!image.loadFromFile(strFileName))
@@ -200,7 +204,7 @@ private:
 				static_cast<float>(wndSize.y) / 2.F
 			);
 
-			SetTimer(handle, m_TimerID, 16u, nullptr); // 1000 / 60 ~= 16
+			SetTimer(handle, m_TimerID, 16Ui32, nullptr); // 1000 / 60 ~= 16
 			break;
 		}
 		}
@@ -209,7 +213,7 @@ private:
 	}
 
 private:
-	unsigned __int64 m_TimerID{ 1U };
+	unsigned __int64 m_TimerID{ 1Ui64 };
 
 	HINSTANCE m_hInstance;
 
@@ -238,7 +242,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	// Loop until a WM_QUIT message is received
 	MSG message;
-	while (GetMessageW(&message, nullptr, 0, 0))
+	while (GetMessageW(&message, nullptr, 0Ui32, 0Ui32))
 	{
 		if (!TranslateAcceleratorW(message.hwnd, hAccelTable, &message))
 		{

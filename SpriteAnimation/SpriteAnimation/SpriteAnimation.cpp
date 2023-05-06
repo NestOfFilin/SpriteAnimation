@@ -17,7 +17,7 @@ CSimpleSCGerenator::CSimpleSCGerenator(const sf::Image& image)
 
 CColorColumnSCGerenator::CColorColumnSCGerenator(
 	const sf::Image& image,
-	const sf::Color separator/* = sf::Color(0U, 0U, 0U, 0U)*/)
+	const sf::Color separator/* = sf::Color(0Ui8, 0Ui8, 0Ui8, 0Ui8)*/)
 	: CSpritesCountGerenator(image)
 	, m_Separator(separator)
 {
@@ -30,10 +30,10 @@ unsigned int CColorColumnSCGerenator::Generate()
 	const sf::Vector2u imageSize = image.getSize();
 
 	bool isPrevColumnSeparator = true;
-	for (unsigned int x = 0; x < imageSize.x; x++)
+	for (unsigned int x = 0U; x < imageSize.x; x++)
 	{
 		bool columnNotSeparator = false;
-		for (unsigned int y = 0; y < imageSize.y; y++)
+		for (unsigned int y = 0U; y < imageSize.y; y++)
 		{
 			if (image.getPixel(x, y) != m_Separator)
 			{

@@ -3,7 +3,7 @@
 #include <memory>
 
 
-enum class ESCGerenatorType
+enum class ESCGerenatorType : unsigned int
 {
 	Simple = 1,
 	ColorColumn = 2
@@ -58,7 +58,7 @@ class CColorColumnSCGerenator final
 public:
 	CColorColumnSCGerenator(
 		const sf::Image& image,
-		const sf::Color separator = sf::Color(0U, 0U, 0U, 0U)
+		const sf::Color separator = sf::Color(0Ui8, 0Ui8, 0Ui8, 0Ui8)
 	);
 
 	~CColorColumnSCGerenator() = default;
