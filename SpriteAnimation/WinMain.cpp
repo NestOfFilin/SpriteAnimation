@@ -1,7 +1,6 @@
 #include "SpriteAnimation/SpriteAnimation.h"
 
 #include <windows.h>
-#include <cmath>
 #include <set>
 
 
